@@ -14,28 +14,51 @@ namespace AutoDJ
 {
     public partial class frmAutoDJ : Form
     {
+        string html;
+        string videoHTML;
+
         public frmAutoDJ()
         {
             InitializeComponent();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnRequest_Click(object sender, EventArgs e)
+        {
+            RequestSong();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtCriteria.Clear();
+            txtName.Clear();
+            txtDuration.Clear();
+
+            html = "";
+            videoHTML = "";
+        }
+
+
+
+        private void RequestSong()
+        {
+            string searchURL = GetSearchQuery();
+
+            html = GetHTML(searchURL);
+            videoHTML = FindFromSource(html, "watch?", "div class", 2);
+
+            string videoURL = GetVideoURL();
+
+            DisplayInfo();
+            
+            System.Diagnostics.Process.Start(videoURL);
+        }
+
+        private string GetSearchQuery()
         {
             string criteria = txtCriteria.Text;
             criteria.Replace(' ', '+');
-            string searchURL = "http://www.youtube.com/results?search_query=" + criteria;
-            string html = GetHTML(searchURL);
-            string videoHTML = FindFromSource(html, "watch?", "div class", 2);
-            string videoURL = "http://www.youtube.com/" + FindFromSource(videoHTML, "watch?", '"'.ToString(), 1);
-            string songName = FindFromSource(videoHTML, "dir", '<'.ToString(), 1);
-            songName = songName.Substring(10, songName.Length - 10);
-            string songDuration = FindFromSource(videoHTML, "Duration: ", '.'.ToString(), 1);
-            songDuration = songDuration.Substring(10, songDuration.Length - 10);
-
-            txtName.Text = songName;
-            txtDuration.Text = songDuration;
-            System.Diagnostics.Process.Start(videoURL);
-        }
+            return "http://www.youtube.com/results?search_query=" + criteria;
+        } 
 
         private string GetHTML(string url)
         {
@@ -47,6 +70,11 @@ namespace AutoDJ
             }
 
             return html;
+        }
+
+        private string GetVideoURL()
+        {
+            return "http://www.youtube.com/" + FindFromSource(videoHTML, "watch?", '"'.ToString(), 1);
         }
 
         private string FindFromSource(string source, string startTerm, string endTerm, int occurence)
@@ -71,11 +99,30 @@ namespace AutoDJ
             return text;
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private string GetSongName()
         {
-            txtCriteria.Clear();
-            txtName.Clear();
-            txtDuration.Clear();
+            string songName = FindFromSource(videoHTML, "dir", '<'.ToString(), 1);
+            songName = songName.Substring(10, songName.Length - 10);
+            return songName;
+        }
+
+        private Object GetSongDuration(bool inMinutes)
+        {
+            string songDuration = FindFromSource(videoHTML, "Duration: ", '.'.ToString(), 1);
+            songDuration = songDuration.Substring(10, songDuration.Length - 10);
+            string[] time = songDuration.Split(':');
+            int seconds = Convert.ToInt32(time[0]) * 60 + Convert.ToInt32(time[1]);
+
+            if (inMinutes)
+                return songDuration;
+            else
+                return seconds;
+        }
+
+        private void DisplayInfo()
+        {
+            txtName.Text = GetSongName();
+            txtDuration.Text = (string)GetSongDuration(true);
         }
     }
 }

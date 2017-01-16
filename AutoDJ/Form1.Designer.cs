@@ -30,12 +30,14 @@
         {
             this.txtCriteria = new System.Windows.Forms.TextBox();
             this.lblSong = new System.Windows.Forms.Label();
-            this.btnSearch = new System.Windows.Forms.Button();
+            this.btnRequest = new System.Windows.Forms.Button();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
             this.txtDuration = new System.Windows.Forms.TextBox();
             this.lblDuration = new System.Windows.Forms.Label();
+            this.txtTimer = new System.Windows.Forms.TextBox();
+            this.lblTimer = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtCriteria
@@ -54,15 +56,15 @@
             this.lblSong.TabIndex = 1;
             this.lblSong.Text = "Song:";
             // 
-            // btnSearch
+            // btnRequest
             // 
-            this.btnSearch.Location = new System.Drawing.Point(281, 31);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 2;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnRequest.Location = new System.Drawing.Point(281, 31);
+            this.btnRequest.Name = "btnRequest";
+            this.btnRequest.Size = new System.Drawing.Size(75, 23);
+            this.btnRequest.TabIndex = 2;
+            this.btnRequest.Text = "Request";
+            this.btnRequest.UseVisualStyleBackColor = true;
+            this.btnRequest.Click += new System.EventHandler(this.btnRequest_Click);
             // 
             // txtName
             // 
@@ -106,17 +108,35 @@
             this.lblDuration.TabIndex = 7;
             this.lblDuration.Text = "Song Duration:";
             // 
+            // txtTimer
+            // 
+            this.txtTimer.Location = new System.Drawing.Point(110, 149);
+            this.txtTimer.Name = "txtTimer";
+            this.txtTimer.Size = new System.Drawing.Size(100, 20);
+            this.txtTimer.TabIndex = 8;
+            // 
+            // lblTimer
+            // 
+            this.lblTimer.AutoSize = true;
+            this.lblTimer.Location = new System.Drawing.Point(43, 152);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(61, 13);
+            this.lblTimer.TabIndex = 9;
+            this.lblTimer.Text = "SongTimer:";
+            // 
             // frmAutoDJ
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(405, 195);
+            this.Controls.Add(this.lblTimer);
+            this.Controls.Add(this.txtTimer);
             this.Controls.Add(this.lblDuration);
             this.Controls.Add(this.txtDuration);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.txtName);
-            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.btnRequest);
             this.Controls.Add(this.lblSong);
             this.Controls.Add(this.txtCriteria);
             this.Name = "frmAutoDJ";
@@ -130,12 +150,14 @@
 
         private System.Windows.Forms.TextBox txtCriteria;
         private System.Windows.Forms.Label lblSong;
-        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnRequest;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.TextBox txtDuration;
         private System.Windows.Forms.Label lblDuration;
+        private System.Windows.Forms.TextBox txtTimer;
+        private System.Windows.Forms.Label lblTimer;
     }
 }
 
