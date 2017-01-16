@@ -14,6 +14,8 @@ namespace AutoDJ
 {
     public partial class frmAutoDJ : Form
     {
+        Player player = new Player();
+
         string html;
         string videoHTML;
 
@@ -49,8 +51,7 @@ namespace AutoDJ
             string videoURL = GetVideoURL();
 
             DisplayInfo();
-            
-            System.Diagnostics.Process.Start(videoURL);
+            player.PlaySong(videoURL);
         }
 
         private string GetSearchQuery()
