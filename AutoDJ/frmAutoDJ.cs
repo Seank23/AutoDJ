@@ -14,6 +14,8 @@ namespace AutoDJ
     {
         RequestProcessor processor;
 
+        private int songMinutes = 0;
+
         public frmAutoDJ()
         {
             InitializeComponent();
@@ -27,9 +29,13 @@ namespace AutoDJ
 
         private void btnClear_Click(object sender, EventArgs e)
         {
+            processor.ClearProcessData();
+
             txtCriteria.Clear();
             txtName.Clear();
             txtDuration.Clear();
+            txtTimer.Clear();
+            SetRequestStatus("Ready!");
         }
 
         public string GetSearchInput() { return txtCriteria.Text; }
@@ -40,18 +46,35 @@ namespace AutoDJ
 
         public void SetSongTimer(int seconds)
         {
-            int minutes = 0;
+            if(seconds < 60) { songMinutes = 0; }
 
-            if (seconds % 60 == 0 && seconds != 0) { minutes++; }
+            if (seconds % 60 == 0 && seconds != 0) { songMinutes++; }
+
+            if(songMinutes > 0) { seconds -= 60 * songMinutes; }
 
             if (seconds < 10)
             {
-                txtTimer.Text = "0" + minutes + ":0" + seconds;
+                txtTimer.Text = songMinutes + ":0" + seconds;
             }
             else
             {
-                txtTimer.Text = "0" + minutes + ":" + seconds;
+                txtTimer.Text = songMinutes + ":" + seconds;
             }
+        }
+
+        public void SetRequestStatus(string status)
+        {
+            lblRequestStatus.Text = status;
+        }
+
+        public void StartProgressBar()
+        {
+            pgbStatusBar.Style = ProgressBarStyle.Marquee;
+        }
+
+        public void EndProgressBar()
+        {
+            pgbStatusBar.Style = ProgressBarStyle.Blocks;
         }
     }
 }

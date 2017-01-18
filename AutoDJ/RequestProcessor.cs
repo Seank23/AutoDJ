@@ -7,38 +7,54 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace AutoDJ
 {
     class RequestProcessor
     {
-        Player player = new Player();
+        Player player;
         frmAutoDJ ui;
 
         string html;
         string videoHTML;
 
-        public RequestProcessor(frmAutoDJ form)
+        public RequestProcessor(frmAutoDJ ui)
         {
-            this.ui = form;
+            this.ui = ui;
+            player = new Player(ui);
+        }
+
+        private void InvokeUI(Action a)
+        {
+            IAsyncResult uiCall = ui.BeginInvoke(new MethodInvoker(a));
+            ui.EndInvoke(uiCall);
         }
 
         public async void RequestSong()
         {
+            bool songStarted, songFinished = false;
+
             string searchURL = GetSearchQuery();
 
-            html =  await GetHTMLAsync(searchURL);
+            html = await GetHTMLAsync(searchURL);
+
             videoHTML = FindFromSource(html, "watch?", "div class", 2);
 
             string videoURL = GetVideoURL();
 
             DisplayInfo();
 
-            bool songStarted = await player.PlaySongAsync(videoURL);
+            songStarted = await player.PlaySongAsync(videoURL);
 
             if (songStarted)
             {
-                bool songFinished = await StartTimerAsync((int)GetSongDuration(false));
+                songFinished = await player.StartTimerAsync((int)GetSongDuration(false));
+            }
+
+            if(songFinished)
+            {
+                Console.WriteLine("Song Finished");
             }
         }
 
@@ -49,7 +65,13 @@ namespace AutoDJ
             return "http://www.youtube.com/results?search_query=" + search;
         }
 
-        private Task<string> GetHTMLAsync(string url) { return Task.Factory.StartNew(() => GetHTML(url)); }
+        private Task<string> GetHTMLAsync(string url)
+        {
+            Task<string> html = Task.Factory.StartNew(() => GetHTML(url));
+            Task.Factory.StartNew(() => WhileGetHTML(html));
+            return html;
+        }
+
         private string GetHTML(string url)
         {
             string html = "";
@@ -60,6 +82,22 @@ namespace AutoDJ
             }
 
             return html;
+        }
+
+        private void WhileGetHTML(Task<string> html)
+        {
+            bool started = false;
+            while (!html.IsCompleted)
+            {
+                if(!started)
+                {
+                    InvokeUI(() => ui.SetRequestStatus("Processing Request..."));
+                    InvokeUI(() => ui.StartProgressBar());
+                    started = true;
+                }
+            }
+            InvokeUI(() => ui.SetRequestStatus("Request Successful!\nPlaying Song:"));
+            InvokeUI(() => ui.EndProgressBar());
         }
 
         private string GetVideoURL()
@@ -115,25 +153,11 @@ namespace AutoDJ
             ui.SetSongDuration((string)GetSongDuration(true));
         }
 
-        private Task<bool> StartTimerAsync(int songDuration) { return Task.Factory.StartNew(() => StartTimer(songDuration)); }
-        private bool StartTimer(int songDuration)
+        public void ClearProcessData()
         {
-            Stopwatch songTimer = new Stopwatch();
-            songTimer.Start();
-
-            while(songTimer.ElapsedMilliseconds < songDuration * 1000)
-            {
-                Console.WriteLine((int)songTimer.ElapsedMilliseconds / 1000);
-                //UpdateTimer((int)songTimer.ElapsedMilliseconds / 1000);
-                Thread.Sleep(1000);
-            }
-
-            return true;
-        }
-
-        private void UpdateTimer(int songDuration)
-        {
-            ui.SetSongTimer(songDuration);
+            html = "";
+            videoHTML = "";
+            player.ClearPlayerData();
         }
     }
 }

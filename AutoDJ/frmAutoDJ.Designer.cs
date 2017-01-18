@@ -38,11 +38,13 @@
             this.lblDuration = new System.Windows.Forms.Label();
             this.txtTimer = new System.Windows.Forms.TextBox();
             this.lblTimer = new System.Windows.Forms.Label();
+            this.lblRequestStatus = new System.Windows.Forms.Label();
+            this.pgbStatusBar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // txtCriteria
             // 
-            this.txtCriteria.Location = new System.Drawing.Point(110, 33);
+            this.txtCriteria.Location = new System.Drawing.Point(83, 23);
             this.txtCriteria.Name = "txtCriteria";
             this.txtCriteria.Size = new System.Drawing.Size(156, 20);
             this.txtCriteria.TabIndex = 0;
@@ -50,7 +52,7 @@
             // lblSong
             // 
             this.lblSong.AutoSize = true;
-            this.lblSong.Location = new System.Drawing.Point(69, 36);
+            this.lblSong.Location = new System.Drawing.Point(42, 26);
             this.lblSong.Name = "lblSong";
             this.lblSong.Size = new System.Drawing.Size(35, 13);
             this.lblSong.TabIndex = 1;
@@ -58,7 +60,7 @@
             // 
             // btnRequest
             // 
-            this.btnRequest.Location = new System.Drawing.Point(281, 31);
+            this.btnRequest.Location = new System.Drawing.Point(272, 21);
             this.btnRequest.Name = "btnRequest";
             this.btnRequest.Size = new System.Drawing.Size(75, 23);
             this.btnRequest.TabIndex = 2;
@@ -68,23 +70,23 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(110, 95);
+            this.txtName.Location = new System.Drawing.Point(83, 116);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(246, 20);
+            this.txtName.Size = new System.Drawing.Size(345, 20);
             this.txtName.TabIndex = 3;
             // 
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(38, 98);
+            this.lblName.Location = new System.Drawing.Point(39, 119);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(66, 13);
+            this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 4;
-            this.lblName.Text = "Song Name:";
+            this.lblName.Text = "Name:";
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(281, 61);
+            this.btnClear.Location = new System.Drawing.Point(353, 21);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 5;
@@ -94,7 +96,7 @@
             // 
             // txtDuration
             // 
-            this.txtDuration.Location = new System.Drawing.Point(110, 122);
+            this.txtDuration.Location = new System.Drawing.Point(83, 143);
             this.txtDuration.Name = "txtDuration";
             this.txtDuration.Size = new System.Drawing.Size(100, 20);
             this.txtDuration.TabIndex = 6;
@@ -102,15 +104,15 @@
             // lblDuration
             // 
             this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(26, 125);
+            this.lblDuration.Location = new System.Drawing.Point(27, 146);
             this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(78, 13);
+            this.lblDuration.Size = new System.Drawing.Size(50, 13);
             this.lblDuration.TabIndex = 7;
-            this.lblDuration.Text = "Song Duration:";
+            this.lblDuration.Text = "Duration:";
             // 
             // txtTimer
             // 
-            this.txtTimer.Location = new System.Drawing.Point(110, 149);
+            this.txtTimer.Location = new System.Drawing.Point(83, 170);
             this.txtTimer.Name = "txtTimer";
             this.txtTimer.Size = new System.Drawing.Size(100, 20);
             this.txtTimer.TabIndex = 8;
@@ -118,17 +120,37 @@
             // lblTimer
             // 
             this.lblTimer.AutoSize = true;
-            this.lblTimer.Location = new System.Drawing.Point(43, 152);
+            this.lblTimer.Location = new System.Drawing.Point(4, 173);
             this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(61, 13);
+            this.lblTimer.Size = new System.Drawing.Size(74, 13);
             this.lblTimer.TabIndex = 9;
-            this.lblTimer.Text = "SongTimer:";
+            this.lblTimer.Text = "Time Elapsed:";
+            // 
+            // lblRequestStatus
+            // 
+            this.lblRequestStatus.AutoSize = true;
+            this.lblRequestStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRequestStatus.Location = new System.Drawing.Point(79, 58);
+            this.lblRequestStatus.Name = "lblRequestStatus";
+            this.lblRequestStatus.Size = new System.Drawing.Size(65, 20);
+            this.lblRequestStatus.TabIndex = 10;
+            this.lblRequestStatus.Text = "Ready!";
+            // 
+            // pgbStatusBar
+            // 
+            this.pgbStatusBar.Location = new System.Drawing.Point(272, 58);
+            this.pgbStatusBar.MarqueeAnimationSpeed = 10;
+            this.pgbStatusBar.Name = "pgbStatusBar";
+            this.pgbStatusBar.Size = new System.Drawing.Size(156, 23);
+            this.pgbStatusBar.TabIndex = 11;
             // 
             // frmAutoDJ
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(404, 224);
+            this.ClientSize = new System.Drawing.Size(449, 213);
+            this.Controls.Add(this.pgbStatusBar);
+            this.Controls.Add(this.lblRequestStatus);
             this.Controls.Add(this.lblTimer);
             this.Controls.Add(this.txtTimer);
             this.Controls.Add(this.lblDuration);
@@ -158,6 +180,8 @@
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.TextBox txtTimer;
         private System.Windows.Forms.Label lblTimer;
+        private System.Windows.Forms.Label lblRequestStatus;
+        private System.Windows.Forms.ProgressBar pgbStatusBar;
     }
 }
 
