@@ -2,65 +2,54 @@
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Threading;
+using System.Diagnostics;
 
 namespace AutoDJ
 {
-    public partial class frmAutoDJ : Form
+    class RequestProcessor
     {
         Player player = new Player();
+        frmAutoDJ ui;
 
         string html;
         string videoHTML;
 
-        public frmAutoDJ()
+        public RequestProcessor(frmAutoDJ form)
         {
-            InitializeComponent();
+            this.ui = form;
         }
 
-        private void btnRequest_Click(object sender, EventArgs e)
-        {
-            RequestSong();
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            txtCriteria.Clear();
-            txtName.Clear();
-            txtDuration.Clear();
-
-            html = "";
-            videoHTML = "";
-        }
-
-
-
-        private void RequestSong()
+        public async void RequestSong()
         {
             string searchURL = GetSearchQuery();
 
-            html = GetHTML(searchURL);
+            html =  await GetHTMLAsync(searchURL);
             videoHTML = FindFromSource(html, "watch?", "div class", 2);
 
             string videoURL = GetVideoURL();
 
             DisplayInfo();
-            player.PlaySong(videoURL);
+
+            bool songStarted = await player.PlaySongAsync(videoURL);
+
+            if (songStarted)
+            {
+                bool songFinished = await StartTimerAsync((int)GetSongDuration(false));
+            }
         }
 
         private string GetSearchQuery()
         {
-            string criteria = txtCriteria.Text;
-            criteria.Replace(' ', '+');
-            return "http://www.youtube.com/results?search_query=" + criteria;
-        } 
+            string search = ui.GetSearchInput();
+            search.Replace(' ', '+');
+            return "http://www.youtube.com/results?search_query=" + search;
+        }
 
+        private Task<string> GetHTMLAsync(string url) { return Task.Factory.StartNew(() => GetHTML(url)); }
         private string GetHTML(string url)
         {
             string html = "";
@@ -83,11 +72,11 @@ namespace AutoDJ
             int start, end;
             string text = "";
 
-            if(source.Contains(startTerm))
+            if (source.Contains(startTerm))
             {
                 start = source.IndexOf(startTerm, 0);
 
-                while(occurence > 1)
+                while (occurence > 1)
                 {
                     start = source.IndexOf(startTerm, start + 1);
                     occurence--;
@@ -122,8 +111,29 @@ namespace AutoDJ
 
         private void DisplayInfo()
         {
-            txtName.Text = GetSongName();
-            txtDuration.Text = (string)GetSongDuration(true);
+            ui.SetSongName(GetSongName());
+            ui.SetSongDuration((string)GetSongDuration(true));
+        }
+
+        private Task<bool> StartTimerAsync(int songDuration) { return Task.Factory.StartNew(() => StartTimer(songDuration)); }
+        private bool StartTimer(int songDuration)
+        {
+            Stopwatch songTimer = new Stopwatch();
+            songTimer.Start();
+
+            while(songTimer.ElapsedMilliseconds < songDuration * 1000)
+            {
+                Console.WriteLine((int)songTimer.ElapsedMilliseconds / 1000);
+                //UpdateTimer((int)songTimer.ElapsedMilliseconds / 1000);
+                Thread.Sleep(1000);
+            }
+
+            return true;
+        }
+
+        private void UpdateTimer(int songDuration)
+        {
+            ui.SetSongTimer(songDuration);
         }
     }
 }

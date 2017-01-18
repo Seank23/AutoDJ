@@ -46,17 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoDJ.cs">
+    <Compile Include="RequestProcessor.cs" />
+    <Compile Include="frmAutoDJ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AutoDJ.Designer.cs">
-      <DependentUpon>AutoDJ.cs</DependentUpon>
+    <Compile Include="frmAutoDJ.Designer.cs">
+      <DependentUpon>frmAutoDJ.cs</DependentUpon>
     </Compile>
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AutoDJ.resx">
-      <DependentUpon>AutoDJ.cs</DependentUpon>
+    <EmbeddedResource Include="frmAutoDJ.resx">
+      <DependentUpon>frmAutoDJ.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
