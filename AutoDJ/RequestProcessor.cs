@@ -17,6 +17,7 @@ namespace AutoDJ
         frmAutoDJ ui;
 
         string html;
+        string searchHTML;
         string videoHTML;
 
         public RequestProcessor(frmAutoDJ ui)
@@ -33,15 +34,39 @@ namespace AutoDJ
 
         public async void RequestSong()
         {
-            bool songStarted, songFinished = false;
+            if(html != null)
+            {
+                MessageBox.Show("Please reset before requesting a new song");
+                return;
+            }
 
             string searchURL = GetSearchQuery();
+            if (searchURL == "") { ui.Reset(); return; }
 
             html = await GetHTMLAsync(searchURL);
+            if (html == "") { ui.Reset(); return; }
 
-            videoHTML = FindFromSource(html, "watch?", "div class", 2);
-
+            searchHTML = FindFromSource(html, "watch?", "div class", 2);
             string videoURL = GetVideoURL();
+
+            videoHTML = await GetHTMLAsync(videoURL);
+            if (videoHTML == "") { ui.Reset(); return; }
+
+            if (IsMusic())
+            {
+                RequestSuccessful(videoURL);
+            }
+            else
+            {
+                MessageBox.Show("Request is not a song. Please enter the name of a song");
+                ui.Reset();
+                return;
+            } 
+        }
+
+        private async void RequestSuccessful(string videoURL)
+        {
+            bool songStarted, songFinished = false;
 
             DisplayInfo();
 
@@ -52,7 +77,7 @@ namespace AutoDJ
                 songFinished = await player.StartTimerAsync((int)GetSongDuration(false));
             }
 
-            if(songFinished)
+            if (songFinished)
             {
                 Console.WriteLine("Song Finished");
             }
@@ -61,6 +86,11 @@ namespace AutoDJ
         private string GetSearchQuery()
         {
             string search = ui.GetSearchInput();
+            if(search == "")
+            {
+                MessageBox.Show("Search criteria must be entered before requesting a song.");
+                return "";
+            }
             search.Replace(' ', '+');
             return "http://www.youtube.com/results?search_query=" + search;
         }
@@ -78,7 +108,15 @@ namespace AutoDJ
 
             using (WebClient client = new WebClient())
             {
-                html = client.DownloadString(url);
+                try
+                {
+                    html = client.DownloadString(url);
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Could not request song. Please try again later.\n" + e.ToString());
+                    return "";
+                }
             }
 
             return html;
@@ -96,13 +134,14 @@ namespace AutoDJ
                     started = true;
                 }
             }
+            if(html.Result == "") { return; }
             InvokeUI(() => ui.SetRequestStatus("Request Successful!\nPlaying Song:"));
             InvokeUI(() => ui.EndProgressBar());
         }
 
         private string GetVideoURL()
         {
-            return "http://www.youtube.com/" + FindFromSource(videoHTML, "watch?", '"'.ToString(), 1);
+            return "http://www.youtube.com/" + FindFromSource(searchHTML, "watch?", '"'.ToString(), 1);
         }
 
         private string FindFromSource(string source, string startTerm, string endTerm, int occurence)
@@ -127,16 +166,25 @@ namespace AutoDJ
             return text;
         }
 
+        private bool IsMusic()
+        {
+            string category = FindFromSource(videoHTML, "Category", "</a>", 1);
+            if (category.Contains("Music"))
+                return true;
+            else
+                return false;
+        }
+
         private string GetSongName()
         {
-            string songName = FindFromSource(videoHTML, "dir", '<'.ToString(), 1);
+            string songName = FindFromSource(searchHTML, "dir", '<'.ToString(), 1);
             songName = songName.Substring(10, songName.Length - 10);
             return songName;
         }
 
         private Object GetSongDuration(bool inMinutes)
         {
-            string songDuration = FindFromSource(videoHTML, "Duration: ", '.'.ToString(), 1);
+            string songDuration = FindFromSource(searchHTML, "Duration: ", '.'.ToString(), 1);
             songDuration = songDuration.Substring(10, songDuration.Length - 10);
             string[] time = songDuration.Split(':');
             int seconds = Convert.ToInt32(time[0]) * 60 + Convert.ToInt32(time[1]);
@@ -155,8 +203,9 @@ namespace AutoDJ
 
         public void ClearProcessData()
         {
-            html = "";
-            videoHTML = "";
+            html = null;
+            searchHTML = null;
+            videoHTML = null;
             player.ClearPlayerData();
         }
     }

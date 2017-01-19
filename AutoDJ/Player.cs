@@ -15,6 +15,7 @@ namespace AutoDJ
 
         Stopwatch songTimer;
         int songDuration = 0;
+        public static bool songPlaying = false;
 
         public Player(frmAutoDJ ui)
         {
@@ -32,6 +33,7 @@ namespace AutoDJ
         {
             Process.Start(url);
             Thread.Sleep(3000);
+            songPlaying = true;
             return true;
         }
 

@@ -27,15 +27,10 @@ namespace AutoDJ
             processor.RequestSong();
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private void btnReset_Click(object sender, EventArgs e)
         {
-            processor.ClearProcessData();
-
-            txtCriteria.Clear();
-            txtName.Clear();
-            txtDuration.Clear();
-            txtTimer.Clear();
-            SetRequestStatus("Ready!");
+            if (Player.songPlaying)
+                Reset();
         }
 
         public string GetSearchInput() { return txtCriteria.Text; }
@@ -74,6 +69,18 @@ namespace AutoDJ
 
         public void EndProgressBar()
         {
+            pgbStatusBar.Style = ProgressBarStyle.Blocks;
+        }
+
+        public void Reset()
+        {
+            processor.ClearProcessData();
+
+            txtCriteria.Clear();
+            txtName.Clear();
+            txtDuration.Clear();
+            txtTimer.Clear();
+            SetRequestStatus("Ready!");
             pgbStatusBar.Style = ProgressBarStyle.Blocks;
         }
     }

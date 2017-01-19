@@ -33,7 +33,7 @@
             this.btnRequest = new System.Windows.Forms.Button();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
             this.txtDuration = new System.Windows.Forms.TextBox();
             this.lblDuration = new System.Windows.Forms.Label();
             this.txtTimer = new System.Windows.Forms.TextBox();
@@ -84,15 +84,15 @@
             this.lblName.TabIndex = 4;
             this.lblName.Text = "Name:";
             // 
-            // btnClear
+            // btnReset
             // 
-            this.btnClear.Location = new System.Drawing.Point(353, 21);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 5;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnReset.Location = new System.Drawing.Point(353, 21);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(75, 23);
+            this.btnReset.TabIndex = 5;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // txtDuration
             // 
@@ -155,7 +155,7 @@
             this.Controls.Add(this.txtTimer);
             this.Controls.Add(this.lblDuration);
             this.Controls.Add(this.txtDuration);
-            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.btnRequest);
@@ -175,7 +175,7 @@
         private System.Windows.Forms.Button btnRequest;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.TextBox txtDuration;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.TextBox txtTimer;
