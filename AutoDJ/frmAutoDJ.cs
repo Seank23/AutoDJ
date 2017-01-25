@@ -13,13 +13,15 @@ namespace AutoDJ
     public partial class frmAutoDJ : Form
     {
         RequestProcessor processor;
+        QueueManager queue;
 
         private int songMinutes = 0;
 
         public frmAutoDJ()
         {
             InitializeComponent();
-            processor = new RequestProcessor(this);
+            queue = new QueueManager(this);
+            processor = new RequestProcessor(this, queue);
         }
 
         private void btnRequest_Click(object sender, EventArgs e)
@@ -29,8 +31,12 @@ namespace AutoDJ
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            if (Player.songPlaying)
-                Reset();
+             ResetRequest();
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            queue.PlayQueue();
         }
 
         public string GetSearchInput() { return txtCriteria.Text; }
@@ -72,16 +78,49 @@ namespace AutoDJ
             pgbStatusBar.Style = ProgressBarStyle.Blocks;
         }
 
-        public void Reset()
+        public void CreateQueueUI(Song song)
+        {
+            QueueItem songEntry = new QueueItem();
+            songEntry.Parent = pnlQueueContainer;
+            songEntry.Name = "qitSong" + (song.queuePosition + 1);
+            songEntry.lblPosition.Text = (song.queuePosition + 1).ToString() + ".";
+            songEntry.lblName.Text = song.name;
+            songEntry.lblDuration.Text = "Duration: " + song.durationMinutes;
+        }
+
+        public void ClearQueueUI()
+        {
+            pnlQueueContainer.SuspendLayout();
+
+            if (pnlQueueContainer.Controls.Count > 0)
+            {
+                for (int i = (pnlQueueContainer.Controls.Count - 1); i >= 0; i--)
+                {
+                    Control c = pnlQueueContainer.Controls[i];
+                    c.Dispose();
+                }
+                GC.Collect();
+            }
+
+            pnlQueueContainer.ResumeLayout();
+        }
+
+        public void ResetRequest()
         {
             processor.ClearProcessData();
 
             txtCriteria.Clear();
+            SetRequestStatus("Ready!");
+            pgbStatusBar.Style = ProgressBarStyle.Blocks;
+            GC.Collect();
+        }
+
+        public void ResetInfo()
+        {
             txtName.Clear();
             txtDuration.Clear();
             txtTimer.Clear();
-            SetRequestStatus("Ready!");
-            pgbStatusBar.Style = ProgressBarStyle.Blocks;
+            lblRequestStatus.Text = "Ready!";
         }
     }
 }

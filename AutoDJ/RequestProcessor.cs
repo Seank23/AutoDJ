@@ -13,17 +13,17 @@ namespace AutoDJ
 {
     class RequestProcessor
     {
-        Player player;
         frmAutoDJ ui;
+        QueueManager queue;
 
         string html;
         string searchHTML;
         string videoHTML;
 
-        public RequestProcessor(frmAutoDJ ui)
+        public RequestProcessor(frmAutoDJ ui, QueueManager queue)
         {
             this.ui = ui;
-            player = new Player(ui);
+            this.queue = queue;
         }
 
         private void InvokeUI(Action a)
@@ -41,46 +41,37 @@ namespace AutoDJ
             }
 
             string searchURL = GetSearchQuery();
-            if (searchURL == "") { ui.Reset(); return; }
+            if (searchURL == "") { ui.ResetRequest(); return; }
 
             html = await GetHTMLAsync(searchURL);
-            if (html == "") { ui.Reset(); return; }
+            if (html == "") { ui.ResetRequest(); return; }
 
             searchHTML = FindFromSource(html, "watch?", "div class", 2);
             string videoURL = GetVideoURL();
 
             videoHTML = await GetHTMLAsync(videoURL);
-            if (videoHTML == "") { ui.Reset(); return; }
+            if (videoHTML == "") { ui.ResetRequest(); return; }
 
             if (IsMusic())
             {
-                RequestSuccessful(videoURL);
+                queue.AddToQueue(CreateSong(videoURL));
             }
             else
             {
                 MessageBox.Show("Request is not a song. Please enter the name of a song");
-                ui.Reset();
+                ui.ResetRequest();
                 return;
             } 
         }
 
-        private async void RequestSuccessful(string videoURL)
+        private Song CreateSong(string url)
         {
-            bool songStarted, songFinished = false;
-
-            DisplayInfo();
-
-            songStarted = await player.PlaySongAsync(videoURL);
-
-            if (songStarted)
-            {
-                songFinished = await player.StartTimerAsync((int)GetSongDuration(false));
-            }
-
-            if (songFinished)
-            {
-                Console.WriteLine("Song Finished");
-            }
+            Song song = new Song();
+            song.url = url;
+            song.name = GetSongName();
+            song.durationSeconds = (int)GetSongDuration(false);
+            song.durationMinutes = (string)GetSongDuration(true);
+            return song;
         }
 
         private string GetSearchQuery()
@@ -135,7 +126,7 @@ namespace AutoDJ
                 }
             }
             if(html.Result == "") { return; }
-            InvokeUI(() => ui.SetRequestStatus("Request Successful!\nPlaying Song:"));
+            InvokeUI(() => ui.SetRequestStatus("Request Successful!\nAdded Song to Queue:"));
             InvokeUI(() => ui.EndProgressBar());
         }
 
@@ -195,18 +186,11 @@ namespace AutoDJ
                 return seconds;
         }
 
-        private void DisplayInfo()
-        {
-            ui.SetSongName(GetSongName());
-            ui.SetSongDuration((string)GetSongDuration(true));
-        }
-
         public void ClearProcessData()
         {
             html = null;
             searchHTML = null;
             videoHTML = null;
-            player.ClearPlayerData();
         }
     }
 }

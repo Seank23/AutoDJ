@@ -40,6 +40,8 @@
             this.lblTimer = new System.Windows.Forms.Label();
             this.lblRequestStatus = new System.Windows.Forms.Label();
             this.pgbStatusBar = new System.Windows.Forms.ProgressBar();
+            this.pnlQueueContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnPlay = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtCriteria
@@ -144,11 +146,31 @@
             this.pgbStatusBar.Size = new System.Drawing.Size(156, 23);
             this.pgbStatusBar.TabIndex = 11;
             // 
+            // pnlQueueContainer
+            // 
+            this.pnlQueueContainer.Location = new System.Drawing.Point(460, 21);
+            this.pnlQueueContainer.Name = "pnlQueueContainer";
+            this.pnlQueueContainer.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlQueueContainer.Size = new System.Drawing.Size(270, 540);
+            this.pnlQueueContainer.TabIndex = 12;
+            // 
+            // btnPlay
+            // 
+            this.btnPlay.Location = new System.Drawing.Point(272, 141);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(75, 23);
+            this.btnPlay.TabIndex = 13;
+            this.btnPlay.Text = "Play";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
             // frmAutoDJ
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(449, 213);
+            this.ClientSize = new System.Drawing.Size(750, 586);
+            this.Controls.Add(this.btnPlay);
+            this.Controls.Add(this.pnlQueueContainer);
             this.Controls.Add(this.pgbStatusBar);
             this.Controls.Add(this.lblRequestStatus);
             this.Controls.Add(this.lblTimer);
@@ -182,6 +204,8 @@
         private System.Windows.Forms.Label lblTimer;
         private System.Windows.Forms.Label lblRequestStatus;
         private System.Windows.Forms.ProgressBar pgbStatusBar;
+        private System.Windows.Forms.FlowLayoutPanel pnlQueueContainer;
+        private System.Windows.Forms.Button btnPlay;
     }
 }
 
