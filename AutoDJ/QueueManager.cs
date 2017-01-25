@@ -57,10 +57,7 @@ namespace AutoDJ
                     else
                     {
                         Console.WriteLine("Song Finished");
-                        ChangeQueuePosition();
-                        songsInQueue.RemoveAt(0);
-                        UpdateQueueUI();
-                        PlayQueue();
+                        NextSong();
                     }
                 }
             }
@@ -69,6 +66,14 @@ namespace AutoDJ
                 MessageBox.Show("Please add songs to the queue");
                 return;
             }
+        }
+
+        public void NextSong()
+        {
+            ChangeQueuePosition();
+            songsInQueue.RemoveAt(0);
+            UpdateQueueUI();
+            PlayQueue();
         }
 
         private void ChangeQueuePosition()

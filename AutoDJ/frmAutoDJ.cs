@@ -39,6 +39,30 @@ namespace AutoDJ
             queue.PlayQueue();
         }
 
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            if (Player.songStarted)
+            {
+                Player.songPaused = !Player.songPaused;
+
+                if (Player.songPaused)
+                    btnPause.Text = "Resume";
+                else
+                    btnPause.Text = "Pause";
+            }
+        }
+
+        private void btnClearPlaylist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSkip_Click(object sender, EventArgs e)
+        {
+            if (Player.songStarted)
+                queue.NextSong();
+        }
+
         public string GetSearchInput() { return txtCriteria.Text; }
 
         public void SetSongName(string name) { txtName.Text = name; }

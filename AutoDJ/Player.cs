@@ -15,7 +15,8 @@ namespace AutoDJ
 
         Stopwatch songTimer;
         int songDuration = 0;
-        public static bool songPlaying = false;
+        public static bool songStarted = false;
+        public static bool songPaused = false;
 
         public Player(frmAutoDJ ui)
         {
@@ -33,7 +34,7 @@ namespace AutoDJ
         {
             Process.Start(url);
             Thread.Sleep(3000);
-            songPlaying = true;
+            songStarted = true;
             return true;
         }
 
@@ -53,8 +54,17 @@ namespace AutoDJ
         {
             while (songTimer.ElapsedMilliseconds <= songDuration * 1000)
             {
-                InvokeUI(() => ui.SetSongTimer((int)songTimer.ElapsedMilliseconds / 1000));
-                Thread.Sleep(1000);
+                if (!songPaused)
+                {
+                    songTimer.Start();
+                    InvokeUI(() => ui.SetSongTimer((int)songTimer.ElapsedMilliseconds / 1000));
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    songTimer.Stop();
+                }
+ 
             }
 
             InvokeUI(() => ui.SetSongTimer(0));
