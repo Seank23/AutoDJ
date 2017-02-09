@@ -54,7 +54,7 @@ namespace AutoDJ
 
         private void btnClearPlaylist_Click(object sender, EventArgs e)
         {
-
+            queue.ClearQueue();
         }
 
         private void btnSkip_Click(object sender, EventArgs e)

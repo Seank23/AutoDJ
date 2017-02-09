@@ -50,15 +50,8 @@ namespace AutoDJ
 
                 if (songFinished)
                 {
-                    if (songsInQueue.Count == 1)
-                    {
-                        QueueFinished();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Song Finished");
-                        NextSong();
-                    }
+                    Console.WriteLine("Song Finished");
+                    NextSong();
                 }
             }
             else
@@ -70,10 +63,18 @@ namespace AutoDJ
 
         public void NextSong()
         {
-            ChangeQueuePosition();
-            songsInQueue.RemoveAt(0);
-            UpdateQueueUI();
-            PlayQueue();
+            if (songsInQueue.Count == 1)
+            {
+                QueueFinished();
+            }
+            else
+            {
+                ChangeQueuePosition();
+                songsInQueue.RemoveAt(0);
+                UpdateQueueUI();
+                player.ResetTimer();
+                PlayQueue();
+            }
         }
 
         private void ChangeQueuePosition()
@@ -95,7 +96,21 @@ namespace AutoDJ
             songsInQueue.RemoveAt(0);
             UpdateQueueUI();
             ui.ResetInfo();
+            player.ResetTimer();
             MessageBox.Show("Playlist finished");
+        }
+
+        public void ClearQueue()
+        {
+            songsInQueue.Clear();
+            UpdateQueueUI();
+            ui.ResetInfo();
+
+            if(Player.songStarted)
+                player.ResetTimer();
+
+            GC.Collect();
+            MessageBox.Show("Playlist cleared");
         }
     }
 }

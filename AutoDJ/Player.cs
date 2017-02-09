@@ -18,6 +18,8 @@ namespace AutoDJ
         public static bool songStarted = false;
         public static bool songPaused = false;
 
+        CancellationTokenSource timerSource;
+
         public Player(frmAutoDJ ui)
         {
             this.ui = ui;
@@ -38,22 +40,30 @@ namespace AutoDJ
             return true;
         }
 
-        public Task<bool> StartTimerAsync(int duration) { return Task.Factory.StartNew(() => StartTimer(duration)); }
-        private bool StartTimer(int duration)
+        public Task<bool> StartTimerAsync(int duration)
+        {
+            timerSource = new CancellationTokenSource();
+            return Task.Factory.StartNew(() => StartTimer(duration, timerSource.Token));
+        }
+        private bool StartTimer(int duration, CancellationToken ct)
         {
             songDuration = duration;
             songTimer = new Stopwatch();
             songTimer.Start();
 
-            UpdateTimer(songTimer);
-
-            return true;
+            return UpdateTimer(ct);
         }
 
-        private void UpdateTimer(Stopwatch songTimer)
+        private bool UpdateTimer(CancellationToken ct)
         {
             while (songTimer.ElapsedMilliseconds <= songDuration * 1000)
             {
+                if (ct.IsCancellationRequested)
+                {
+                    Console.WriteLine("Cancelation Requested");
+                    return false;
+                }
+
                 if (!songPaused)
                 {
                     songTimer.Start();
@@ -64,11 +74,17 @@ namespace AutoDJ
                 {
                     songTimer.Stop();
                 }
- 
             }
 
             InvokeUI(() => ui.SetSongTimer(0));
+            return true;
+        }
+
+        public void ResetTimer()
+        {
+            timerSource.Cancel(true);
             songTimer.Reset();
+            timerSource.Dispose();
         }
 
         public void ClearPlayerData()
