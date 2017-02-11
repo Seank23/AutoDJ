@@ -9,9 +9,12 @@ namespace AutoDJ
 {
     class QueueManager
     {
+        public static QueueManager queueManager; 
+
         frmAutoDJ ui;
         Player player;
         public List<Song> songsInQueue = new List<Song>();
+        private Song currentSong;
 
         public QueueManager(frmAutoDJ ui)
         {
@@ -23,16 +26,21 @@ namespace AutoDJ
         {
             songToAdd.queuePosition = songsInQueue.Count;
             songsInQueue.Add(songToAdd);
-            UpdateQueueUI();
+            UpdateQueue();
         }
 
-        private void UpdateQueueUI()
+        public void UpdateQueue()
         {
             ui.ClearQueueUI();
 
+            songsInQueue.Sort((x, y) => y.votes.CompareTo(x.votes));
+
+            int i = 0;
             foreach(Song song in songsInQueue)
             {
+                song.queuePosition = i;
                 ui.CreateQueueUI(song);
+                i++;
             }
         }
 
@@ -41,12 +49,17 @@ namespace AutoDJ
             if(songsInQueue.Count != 0)
             {
                 bool songStarted, songFinished = false;
+                currentSong = songsInQueue[0];
 
-                DisplayInfo(songsInQueue[0]);
-                songStarted = await player.PlaySongAsync(songsInQueue[0].url);
+                songsInQueue.RemoveAt(0);
+                ChangeQueuePosition();
+                UpdateQueue();
+                DisplayInfo(currentSong);
+
+                songStarted = await player.PlaySongAsync(currentSong.url);
 
                 if (songStarted)
-                    songFinished = await player.StartTimerAsync(songsInQueue[0].durationSeconds);
+                    songFinished = await player.StartTimerAsync(currentSong.durationSeconds);
 
                 if (songFinished)
                 {
@@ -63,18 +76,28 @@ namespace AutoDJ
 
         public void NextSong()
         {
-            if (songsInQueue.Count == 1)
+            if (songsInQueue.Count < 1)
             {
                 QueueFinished();
             }
             else
             {
-                ChangeQueuePosition();
-                songsInQueue.RemoveAt(0);
-                UpdateQueueUI();
                 player.ResetTimer();
                 PlayQueue();
             }
+        }
+
+        public void ClearQueue()
+        {
+            songsInQueue.Clear();
+            UpdateQueue();
+            ui.ResetInfo();
+
+            if (Player.songStarted)
+                player.ResetTimer();
+
+            GC.Collect();
+            MessageBox.Show("Playlist cleared");
         }
 
         private void ChangeQueuePosition()
@@ -93,24 +116,9 @@ namespace AutoDJ
 
         private void QueueFinished()
         {
-            songsInQueue.RemoveAt(0);
-            UpdateQueueUI();
             ui.ResetInfo();
             player.ResetTimer();
             MessageBox.Show("Playlist finished");
-        }
-
-        public void ClearQueue()
-        {
-            songsInQueue.Clear();
-            UpdateQueueUI();
-            ui.ResetInfo();
-
-            if(Player.songStarted)
-                player.ResetTimer();
-
-            GC.Collect();
-            MessageBox.Show("Playlist cleared");
         }
     }
 }

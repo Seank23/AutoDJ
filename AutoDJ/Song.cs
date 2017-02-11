@@ -8,10 +8,11 @@ namespace AutoDJ
 {
     public class Song
     {
-        public string url;
-        public string name;
-        public int durationSeconds;
-        public string durationMinutes;
-        public int queuePosition;
+        public string url = "";
+        public string name = "";
+        public string durationMinutes = "";
+        public int durationSeconds = 0;
+        public int queuePosition = 0;
+        public int votes = 0;
     }
 }

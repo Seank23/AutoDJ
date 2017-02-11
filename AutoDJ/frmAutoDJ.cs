@@ -22,6 +22,7 @@ namespace AutoDJ
             InitializeComponent();
             queue = new QueueManager(this);
             processor = new RequestProcessor(this, queue);
+            QueueManager.queueManager = queue;
         }
 
         private void btnRequest_Click(object sender, EventArgs e)
@@ -110,6 +111,8 @@ namespace AutoDJ
             songEntry.lblPosition.Text = (song.queuePosition + 1).ToString() + ".";
             songEntry.lblName.Text = song.name;
             songEntry.lblDuration.Text = "Duration: " + song.durationMinutes;
+            songEntry.btnVote.Text = "Votes (" + song.votes + ")";
+            songEntry.allocatedSong = song;
         }
 
         public void ClearQueueUI()

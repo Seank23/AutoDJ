@@ -30,8 +30,7 @@
         {
             this.lblName = new System.Windows.Forms.Label();
             this.lblDuration = new System.Windows.Forms.Label();
-            this.btnLike = new System.Windows.Forms.Button();
-            this.btnDislike = new System.Windows.Forms.Button();
+            this.btnVote = new System.Windows.Forms.Button();
             this.lblPosition = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -55,23 +54,16 @@
             this.lblDuration.TabIndex = 1;
             this.lblDuration.Text = "Duration";
             // 
-            // btnLike
+            // btnVote
             // 
-            this.btnLike.Location = new System.Drawing.Point(120, 43);
-            this.btnLike.Name = "btnLike";
-            this.btnLike.Size = new System.Drawing.Size(59, 27);
-            this.btnLike.TabIndex = 2;
-            this.btnLike.Text = "Like (0)";
-            this.btnLike.UseVisualStyleBackColor = true;
-            // 
-            // btnDislike
-            // 
-            this.btnDislike.Location = new System.Drawing.Point(185, 43);
-            this.btnDislike.Name = "btnDislike";
-            this.btnDislike.Size = new System.Drawing.Size(59, 27);
-            this.btnDislike.TabIndex = 3;
-            this.btnDislike.Text = "Disike (0)";
-            this.btnDislike.UseVisualStyleBackColor = true;
+            this.btnVote.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVote.Location = new System.Drawing.Point(149, 43);
+            this.btnVote.Name = "btnVote";
+            this.btnVote.Size = new System.Drawing.Size(95, 27);
+            this.btnVote.TabIndex = 3;
+            this.btnVote.Text = "Vote (0)";
+            this.btnVote.UseVisualStyleBackColor = true;
+            this.btnVote.Click += new System.EventHandler(this.btnVote_Click);
             // 
             // lblPosition
             // 
@@ -87,8 +79,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lblPosition);
-            this.Controls.Add(this.btnDislike);
-            this.Controls.Add(this.btnLike);
+            this.Controls.Add(this.btnVote);
             this.Controls.Add(this.lblDuration);
             this.Controls.Add(this.lblName);
             this.Name = "QueueItem";
@@ -102,8 +93,7 @@
 
         public System.Windows.Forms.Label lblName;
         public System.Windows.Forms.Label lblDuration;
-        public System.Windows.Forms.Button btnLike;
-        public System.Windows.Forms.Button btnDislike;
+        public System.Windows.Forms.Button btnVote;
         public System.Windows.Forms.Label lblPosition;
     }
 }
