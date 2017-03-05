@@ -34,7 +34,7 @@ namespace AutoDJ
         public Task<bool> PlaySongAsync(string url) { return Task.Factory.StartNew(() => PlaySong(url)); }
         private bool PlaySong(string url)
         {
-            Process.Start(url);
+            ui.SetBrowerURL(url);
             Thread.Sleep(3000);
             songStarted = true;
             return true;
@@ -85,6 +85,7 @@ namespace AutoDJ
             timerSource.Cancel(true);
             songTimer.Reset();
             timerSource.Dispose();
+            ui.ResetBrowser();
         }
 
         public void ClearPlayerData()

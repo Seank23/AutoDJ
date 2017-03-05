@@ -46,6 +46,9 @@ namespace AutoDJ
             {
                 Player.songPaused = !Player.songPaused;
 
+                webBrowser.Focus();
+                SendKeys.Send("k");
+
                 if (Player.songPaused)
                     btnPause.Text = "Resume";
                 else
@@ -103,6 +106,11 @@ namespace AutoDJ
             pgbStatusBar.Style = ProgressBarStyle.Blocks;
         }
 
+        public void SetQueueTime(string time)
+        {
+            lblQueue.Text = "Queue (" + time + "):";  
+        }
+
         public void CreateQueueUI(Song song)
         {
             QueueItem songEntry = new QueueItem();
@@ -148,6 +156,16 @@ namespace AutoDJ
             txtDuration.Clear();
             txtTimer.Clear();
             lblRequestStatus.Text = "Ready!";
+        }
+
+        public void SetBrowerURL(string url)
+        {
+            webBrowser.Url = new Uri(url);
+        }
+
+        public void ResetBrowser()
+        {
+            webBrowser.Url = new Uri("http://www.auto.dj");
         }
     }
 }

@@ -46,6 +46,8 @@
             this.btnPause = new System.Windows.Forms.Button();
             this.btnClearQueue = new System.Windows.Forms.Button();
             this.btnSkip = new System.Windows.Forms.Button();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.lblQueue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtCriteria
@@ -152,10 +154,11 @@
             // 
             // pnlQueueContainer
             // 
-            this.pnlQueueContainer.Location = new System.Drawing.Point(460, 21);
+            this.pnlQueueContainer.AutoScroll = true;
+            this.pnlQueueContainer.Location = new System.Drawing.Point(460, 58);
             this.pnlQueueContainer.Name = "pnlQueueContainer";
             this.pnlQueueContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlQueueContainer.Size = new System.Drawing.Size(270, 540);
+            this.pnlQueueContainer.Size = new System.Drawing.Size(292, 503);
             this.pnlQueueContainer.TabIndex = 12;
             // 
             // btnStart
@@ -208,11 +211,31 @@
             this.btnSkip.UseVisualStyleBackColor = true;
             this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
             // 
+            // webBrowser
+            // 
+            this.webBrowser.Location = new System.Drawing.Point(12, 228);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.Size = new System.Drawing.Size(416, 333);
+            this.webBrowser.TabIndex = 18;
+            // 
+            // lblQueue
+            // 
+            this.lblQueue.AutoSize = true;
+            this.lblQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblQueue.Location = new System.Drawing.Point(470, 23);
+            this.lblQueue.Name = "lblQueue";
+            this.lblQueue.Size = new System.Drawing.Size(129, 20);
+            this.lblQueue.TabIndex = 19;
+            this.lblQueue.Text = "Queue (00:00):";
+            // 
             // frmAutoDJ
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 586);
+            this.ClientSize = new System.Drawing.Size(764, 586);
+            this.Controls.Add(this.lblQueue);
+            this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.btnSkip);
             this.Controls.Add(this.btnClearQueue);
             this.Controls.Add(this.btnPause);
@@ -258,6 +281,8 @@
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnClearQueue;
         private System.Windows.Forms.Button btnSkip;
+        private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.Label lblQueue;
     }
 }
 

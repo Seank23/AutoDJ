@@ -34,6 +34,7 @@ namespace AutoDJ
             ui.ClearQueueUI();
 
             songsInQueue.Sort((x, y) => y.votes.CompareTo(x.votes));
+            ui.SetQueueTime(GetQueueTime(true).ToString());
 
             int i = 0;
             foreach(Song song in songsInQueue)
@@ -118,7 +119,33 @@ namespace AutoDJ
         {
             ui.ResetInfo();
             player.ResetTimer();
+            Player.songStarted = false;
             MessageBox.Show("Playlist finished");
+        }
+
+        private Object GetQueueTime(bool inMinutes)
+        {
+            int queueTime = 0;
+            string queueTimeMinutes = "";
+
+            foreach (Song song in songsInQueue)
+            {
+                queueTime += song.durationSeconds;
+            }
+
+            if(!inMinutes)
+            {
+                return queueTime;
+            }
+            else
+            {
+                if(queueTime % 60 < 10)
+                    queueTimeMinutes = Math.Floor((double)(queueTime / 60)).ToString() + ":0" + queueTime % 60;
+                else
+                    queueTimeMinutes = Math.Floor((double)(queueTime / 60)).ToString() + ":" + queueTime % 60;
+
+                return queueTimeMinutes;
+            }
         }
     }
 }
