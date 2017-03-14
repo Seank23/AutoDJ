@@ -49,7 +49,7 @@ namespace AutoDJ
             searchHTML = FindFromSource(html, "watch?", "div class", 2);
             string videoURL = GetVideoURL();
 
-            videoHTML = await GetHTMLAsync(videoURL);
+            videoHTML = await GetHTMLAsync("http://www.youtube.com/watch?v=" + videoURL);
             if (videoHTML == "") { ui.ResetRequest(); return; }
 
             if (IsMusic())
@@ -67,7 +67,7 @@ namespace AutoDJ
         private Song CreateSong(string url)
         {
             Song song = new Song();
-            song.url = url;
+            song.url = "http://www.youtube.com/watch?v=" + url;
             song.name = GetSongName();
             song.durationSeconds = (int)GetSongDuration(false);
             song.durationMinutes = (string)GetSongDuration(true);
@@ -132,7 +132,9 @@ namespace AutoDJ
 
         private string GetVideoURL()
         {
-            return "http://www.youtube.com/" + FindFromSource(searchHTML, "watch?", '"'.ToString(), 1);
+            string url = FindFromSource(searchHTML, "watch?", '"'.ToString(), 1);
+            string newURL = url.Substring(8, url.Length - 8);
+            return newURL;
         }
 
         private string FindFromSource(string source, string startTerm, string endTerm, int occurence)

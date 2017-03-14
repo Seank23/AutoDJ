@@ -37,7 +37,8 @@ namespace AutoDJ
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            queue.PlayQueue();
+            if(!Player.songStarted)
+                queue.PlayQueue();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -166,6 +167,11 @@ namespace AutoDJ
         public void ResetBrowser()
         {
             webBrowser.Url = new Uri("http://www.auto.dj");
+        }
+
+        public void SetNavigation(bool b)
+        {
+            webBrowser.AllowNavigation = b;
         }
     }
 }

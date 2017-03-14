@@ -35,6 +35,7 @@ namespace AutoDJ
         private bool PlaySong(string url)
         {
             ui.SetBrowerURL(url);
+            ui.SetNavigation(false);
             Thread.Sleep(3000);
             songStarted = true;
             return true;
@@ -82,6 +83,7 @@ namespace AutoDJ
 
         public void ResetTimer()
         {
+            ui.SetNavigation(true);
             timerSource.Cancel(true);
             songTimer.Reset();
             timerSource.Dispose();
