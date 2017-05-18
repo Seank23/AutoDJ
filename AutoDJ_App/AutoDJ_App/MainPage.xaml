@@ -4,8 +4,26 @@
              xmlns:local="clr-namespace:AutoDJ_App"
              x:Class="AutoDJ_App.MainPage">
 
-    <Button HorizontalOptions="Center" VerticalOptions="Center" Text="Click Me" Clicked="Button_Clicked">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+            iOS="0, 20, 0, 0">
+        </OnPlatform>
+    </ContentPage.Padding>
 
-    </Button>
+    <ScrollView>
+        <AbsoluteLayout BackgroundColor="White">
+            
+            <Label Text="AutoDJ" FontAttributes="Bold" FontSize="26"
+                        TextColor="Black" HorizontalTextAlignment="Center" AbsoluteLayout.LayoutBounds=".5,50,1,40" AbsoluteLayout.LayoutFlags="XProportional,WidthProportional" />
+
+            <Entry x:Name="txtName" FontSize="20" TextColor="Black" Placeholder="Enter Song Name" PlaceholderColor="Silver" AbsoluteLayout.LayoutBounds="20,120,180,45"/>
+
+            <Button Text="Search" TextColor="Black" VerticalOptions="Center" 
+                        BackgroundColor="White" BorderColor="Gray" BorderWidth="1" AbsoluteLayout.LayoutBounds="210,120,160,40" Clicked="Button_Clicked"/>
+
+            <Label x:Name="lblSong" TextColor="Black" FontSize="20" AbsoluteLayout.LayoutBounds=".5,200,1,150" AbsoluteLayout.LayoutFlags="XProportional,WidthProportional"/>
+
+        </AbsoluteLayout>
+    </ScrollView>
 
 </ContentPage>
